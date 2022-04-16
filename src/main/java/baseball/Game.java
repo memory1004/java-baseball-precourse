@@ -60,7 +60,6 @@ public final class Game {
      * 게임시작
      */
     public void startGame() {
-        System.out.println(generatedValue);
         System.out.print(INPUT_NUMBER_MESSSAGE);
         final String inputValue = player.getInputValue();
         validInputValue(inputValue);
@@ -133,7 +132,7 @@ public final class Game {
     /**
      * 이번 게임의 결과를 출력
      */
-    public void printResult(){
+    private void printResult(){
         if (this.nothingCount > 0 && this.ballCount == 0 && this.strikeCount == 0) {
             System.out.print("낫싱");
         }
@@ -152,7 +151,7 @@ public final class Game {
      * 이번 게임의 결과값을 반환
      * @return
      */
-    public boolean getResult(){
+    private boolean getResult(){
         if (this.strikeCount == 3) {
             return true;
         }
