@@ -63,6 +63,7 @@ public final class Game {
         System.out.print(INPUT_NUMBER_MESSSAGE);
         final String inputValue = player.getInputValue();
         validInputValue(inputValue);
+        System.out.println(inputValue);
         processGame(inputValue, generatedValue);
         printResult();
         if ( !getResult()){
