@@ -43,7 +43,7 @@ public final class GameLogic {
         printGameMessage(INPUT_NUMBER_MESSSAGE);
         final String inputValue = getInputValue();
         printGameMessageWithLine(inputValue);
-        processGame(inputValue, generatedValue);
+        processGame(inputValue);
         printResult();
         if (!getResult()) {
             startGame();
@@ -103,19 +103,30 @@ public final class GameLogic {
      * @param inputNumber    사용자의 입력 값
      * @param computerNumber 컴퓨터가 생성한 값
      */
-    void processGame(final String inputNumber, final List<String> computerNumber) {
+    void processGame(final String inputNumber) {
         this.playGame.initGameResult();
         final String[] seperatedInputNumer = inputNumber.split("");
         for (int i = 0; i < inputNumber.length(); i++) {
-            if (!computerNumber.contains(seperatedInputNumer[i])) {
-                this.playGame.incrementNothingCount();
-                continue;
-            }
-            if (computerNumber.get(i).indexOf(seperatedInputNumer[i]) == 0) {
+            if (generatedValue.get(i).indexOf(seperatedInputNumer[i]) == 0) {
                 this.playGame.incrementStrikeCount();
                 continue;
             }
+            if (!generatedValue.contains(seperatedInputNumer[i])) {
+                this.playGame.incrementNothingCount();
+                continue;
+            }
+            this.playGame.incrementBallCount();
         }
+    }
+
+    /**
+     * 사용자가 컴퓨터의 값을 입력한 값으로 게임 진행 시
+     * @param inputNumber
+     * @param injectComputerValue
+     */
+    void processGame(final String inputNumber, final List<String> injectComputerValue) {
+        this.generatedValue = injectComputerValue;
+        processGame(inputNumber);
     }
 
     /**
