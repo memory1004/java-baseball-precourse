@@ -2,6 +2,7 @@ package baseball;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import baseball.service.computer.Computer;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,7 @@ public class ComputerTest {
     private static final List<List<String>> generateNumberList = new LinkedList<>();
 
     @BeforeEach
-    public void init(){
+    public void init() {
         for (int i = 0; i < 100; i++) {
             generateNumberList.add(Computer.newInstance().generateNumber());
         }
@@ -25,9 +26,7 @@ public class ComputerTest {
         Computer oldComputer = Computer.newInstance();
         for (int i = 0; i < 100; i++) {
             Computer newComputer = Computer.newInstance();
-            assertThat(oldComputer)
-                    .isExactlyInstanceOf(Computer.class)
-                    .isEqualTo(newComputer);
+            assertThat(oldComputer).isExactlyInstanceOf(Computer.class).isEqualTo(newComputer);
 
         }
     }
@@ -36,12 +35,9 @@ public class ComputerTest {
     @DisplayName(value = "값 포함 테스트")
     public void hasElementTest() {
         for (final List<String> numberList : generateNumberList) {
-            assertThat(generateNumberList)
-                    .contains(numberList);
+            assertThat(generateNumberList).contains(numberList);
             for (final String number : numberList) {
-                assertThat(numberList)
-                        .isNotEmpty()
-                        .contains(number);
+                assertThat(numberList).isNotEmpty().contains(number);
             }
         }
     }
@@ -56,5 +52,4 @@ public class ComputerTest {
             }
         }
     }
-
 }
