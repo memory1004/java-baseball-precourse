@@ -9,10 +9,6 @@ import java.util.List;
  */
 public final class Computer {
     /**
-     * 컴퓨터는 1대만 생성하도록 static변수 선언
-     */
-    private static Computer INSTANCE;
-    /**
      * 숫자 생성 최소 범위
      */
     private static final int START_NUM = 100;
