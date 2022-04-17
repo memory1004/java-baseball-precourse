@@ -1,6 +1,7 @@
-package baseball;
+package baseball.service.game;
 
 import baseball.model.Game;
+import baseball.service.computer.Computer;
 import camp.nextstep.edu.missionutils.Console;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,20 +17,9 @@ public final class GameLogic {
     private static final String ONLY_INPUT_NUMBER = "숫자만 입력가능합니다.";
     private static final String INPUT_NUMBER_MESSSAGE = "숫자를 입력해주세요 : ";
     private Game playGame;
-    /**
-     * 게임내에서 사용될 컴퓨터객체생성
-     */
     private final Computer computer = Computer.newInstance();
-    /**
-     * 이번 게임의 컴퓨터생성 변수 저장공간
-     */
     private List<String> generatedValue;
 
-    /**
-     * 사용자를 입력받아 게임을 초기화하는 생성자
-     *
-     * @param player
-     */
     private GameLogic() {
         // 새로운 게임이 시작되면 컴퓨터생성 변수를 초기화
         this.playGame = Game.getNewInstance();
@@ -62,7 +52,7 @@ public final class GameLogic {
         endGame();
     }
 
-    private String getInputValue() {
+    String getInputValue() {
         try {
             final String inputValue = Console.readLine();
             validInputValue(inputValue);
@@ -75,14 +65,14 @@ public final class GameLogic {
     /**
      * 컴퓨터의 난수 신규생성
      */
-    private void reGenerateValue() {
+    void reGenerateValue() {
         this.generatedValue = computer.generateNumber();
     }
 
     /**
      * 게임 종료로직
      */
-    public void endGame() {
+    void endGame() {
         printGameMessageWithLine(END_GAME_CLOSING_MESSAGE);
         final String inputValue = getInputValue();
         if ("1".equals(inputValue)) {
@@ -113,7 +103,7 @@ public final class GameLogic {
      * @param inputNumber    사용자의 입력 값
      * @param computerNumber 컴퓨터가 생성한 값
      */
-    private void processGame(final String inputNumber, final List<String> computerNumber) {
+    void processGame(final String inputNumber, final List<String> computerNumber) {
         this.playGame.initGameResult();
         final String[] seperatedInputNumer = inputNumber.split("");
         for (int i = 0; i < inputNumber.length(); i++) {
@@ -131,7 +121,7 @@ public final class GameLogic {
     /**
      * 이번 게임의 결과를 출력
      */
-    private void printResult() {
+    void printResult() {
         if (this.playGame.getNothingCount() > 0
                 && (this.playGame.getBallCount() + this.playGame.getStrikeCount() == 0)) {
             printGameMessage("낫싱");
@@ -152,15 +142,15 @@ public final class GameLogic {
      *
      * @return
      */
-    private boolean getResult() {
+    boolean getResult() {
         return playGame.isSuccess();
     }
 
-    private void printGameMessageWithLine(final String message) {
+    void printGameMessageWithLine(final String message) {
         System.out.println(message);
     }
 
-    private void printGameMessage(final String message) {
+    void printGameMessage(final String message) {
         System.out.print(message);
     }
 }
