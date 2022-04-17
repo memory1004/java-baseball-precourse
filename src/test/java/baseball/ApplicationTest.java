@@ -1,14 +1,15 @@
 package baseball;
 
-import camp.nextstep.edu.missionutils.test.NsTest;
-import java.util.LinkedList;
-import java.util.List;
-import org.junit.jupiter.api.Test;
-
 import static camp.nextstep.edu.missionutils.test.Assertions.assertRandomNumberInRangeTest;
 import static camp.nextstep.edu.missionutils.test.Assertions.assertSimpleTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import camp.nextstep.edu.missionutils.test.NsTest;
+import java.util.LinkedList;
+import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class ApplicationTest extends NsTest {
 
@@ -20,8 +21,8 @@ class ApplicationTest extends NsTest {
             generateNumberList.add(Computer.newInstance().generateNumber());
         }
         for (final List<String> numberList : generateNumberList) {
-            for (final String numbers : numberList) {
-                assertThat(!numberList.contains(numbers));
+            for (final String number : numberList) {
+                Assertions.assertFalse(numberList.stream().filter(x->x.equals(number)).count()>1);
             }
         }
     }
