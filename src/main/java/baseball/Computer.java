@@ -36,6 +36,7 @@ public final class Computer {
 
     /**
      * 정적 팩토리 메서드 제공
+     *
      * @return
      */
     public static Computer newInstance() {
@@ -50,13 +51,18 @@ public final class Computer {
         List<String> numberList = new ArrayList<>();
         final String[] numberToString = String.valueOf(generatedNumber).split("");
         for (final String numberStr : numberToString) {
-            if(!numberList.contains(numberStr)) {
-                numberList.add(numberStr);
-                continue;
-            }
+            checkDuplicateAdd(numberList, numberStr);
+        }
+        if (numberList.size() < 3) {
             return generateNumber();
         }
         return numberList;
+    }
+
+    private void checkDuplicateAdd(final List<String> source, final String target) {
+        if (!source.contains(target)) {
+            source.add(target);
+        }
     }
 
 }
