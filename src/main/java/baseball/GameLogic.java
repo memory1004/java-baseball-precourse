@@ -1,5 +1,6 @@
 package baseball;
 
+import baseball.model.Game;
 import camp.nextstep.edu.missionutils.Console;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -7,29 +8,18 @@ import java.util.NoSuchElementException;
 /**
  * 게임을 담당하는 클래스 생성
  */
-public final class Game {
+public final class GameLogic {
 
 
     private static final String END_GAME_CLOSING_MESSAGE = "3개의 숫자를 모두 맞히셨습니다! 게임 종료\n게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.";
     private static final String OVER_INPUT_NUMBER = "숫자는 3자리만 입력가능합니다.";
     private static final String ONLY_INPUT_NUMBER = "숫자만 입력가능합니다.";
     private static final String INPUT_NUMBER_MESSSAGE = "숫자를 입력해주세요 : ";
+    private Game playGame;
     /**
      * 게임내에서 사용될 컴퓨터객체생성
      */
     private final Computer computer = Computer.newInstance();
-    /**
-     * 이 게임의 낫싱카운트 저장변수
-     */
-    private int nothingCount = 0;
-    /**
-     * 이 게임의 스트라이크 저장변수
-     */
-    private int strikeCount = 0;
-    /**
-     * 이 게임의 볼 저장변수
-     */
-    private int ballCount = 0;
     /**
      * 이번 게임의 컴퓨터생성 변수 저장공간
      */
@@ -37,33 +27,36 @@ public final class Game {
 
     /**
      * 사용자를 입력받아 게임을 초기화하는 생성자
+     *
      * @param player
      */
-    private Game() {
+    private GameLogic() {
         // 새로운 게임이 시작되면 컴퓨터생성 변수를 초기화
+        this.playGame = Game.getNewInstance();
         reGenerateValue();
     }
 
     /**
      * 정적 팩토리 메서드 제공
+     *
      * @param user 게임 플레이어
      * @return 이번회차 게임객체 리턴
      */
-    public static Game getInstance() {
-        return new Game();
+    public static GameLogic getInstance() {
+        return new GameLogic();
     }
 
     /**
      * 게임시작
      */
     public void startGame() {
-        System.out.print(INPUT_NUMBER_MESSSAGE);
+        printGameMessage(INPUT_NUMBER_MESSSAGE);
         final String inputValue = getInputValue();
         validInputValue(inputValue);
-        System.out.println(inputValue);
+        printGameMessageWithLine(inputValue);
         processGame(inputValue, generatedValue);
         printResult();
-        if ( !getResult()){
+        if (!getResult()) {
             startGame();
             return;
         }
@@ -81,7 +74,7 @@ public final class Game {
     /**
      * 컴퓨터의 난수 신규생성
      */
-    private void reGenerateValue(){
+    private void reGenerateValue() {
         this.generatedValue = computer.generateNumber();
     }
 
@@ -89,9 +82,9 @@ public final class Game {
      * 게임 종료로직
      */
     public void endGame() {
-        System.out.println(END_GAME_CLOSING_MESSAGE);
+        printGameMessageWithLine(END_GAME_CLOSING_MESSAGE);
         final String inputValue = getInputValue();
-        if ( "1".equals(inputValue)){
+        if ("1".equals(inputValue)) {
             reGenerateValue();
             startGame();
         }
@@ -99,6 +92,7 @@ public final class Game {
 
     /**
      * 사용자의 입력 값 검증
+     *
      * @param string 입력 값
      */
     private void validInputValue(String string) {
@@ -114,50 +108,58 @@ public final class Game {
 
     /**
      * 게임 처리 로직
-     * @param inputNumber 사용자의 입력 값
+     *
+     * @param inputNumber    사용자의 입력 값
      * @param computerNumber 컴퓨터가 생성한 값
      */
     private void processGame(String inputNumber, List<String> computerNumber) {
-        this.nothingCount = 0;
-        this.strikeCount = 0;
-        this.ballCount = 0;
+        this.playGame.initGameResult();
         final String[] seperatedInputNumer = inputNumber.split("");
         for (int i = 0; i < inputNumber.length(); i++) {
             if (!computerNumber.contains(seperatedInputNumer[i])) {
-                this.nothingCount++;
+                this.playGame.incrementNothingCount();
                 continue;
             }
             if (computerNumber.get(i).indexOf(seperatedInputNumer[i]) == 0) {
-                this.strikeCount++;
+                this.playGame.incrementStrikeCount();
                 continue;
             }
-            this.ballCount++;
+            this.playGame.incrementBallCount();
         }
     }
 
     /**
      * 이번 게임의 결과를 출력
      */
-    private void printResult(){
-        if (this.nothingCount > 0 && this.ballCount == 0 && this.strikeCount == 0) {
-            System.out.print("낫싱");
+    private void printResult() {
+        if (this.playGame.getNothingCount() > 0 && (this.playGame.getBallCount() + this.playGame.getStrikeCount() == 0)) {
+            printGameMessage("낫싱");
         }
 
-        if (this.ballCount > 0) {
-            System.out.print(this.ballCount + "볼 ");
+        if (this.playGame.getBallCount() > 0) {
+            printGameMessage(this.playGame.getBallCount() + "볼 ");
         }
 
-        if (this.strikeCount > 0) {
-            System.out.print(strikeCount + "스트라이크");
+        if (this.playGame.getStrikeCount() > 0) {
+            printGameMessage(this.playGame.getStrikeCount() + "스트라이크");
         }
-        System.out.println("");
+        printGameMessageWithLine("");
     }
 
     /**
      * 이번 게임의 결과값을 반환
+     *
      * @return
      */
-    private boolean getResult(){
-        return this.strikeCount == 3;
+    private boolean getResult() {
+        return playGame.isSuccess();
+    }
+
+    private void printGameMessageWithLine(final String message){
+        System.out.println(message);
+    }
+
+    private void printGameMessage(final String message){
+        System.out.print(message);
     }
 }
