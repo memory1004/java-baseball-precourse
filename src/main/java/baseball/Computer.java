@@ -28,18 +28,18 @@ public final class Computer {
     }
 
     /**
+     *
+     */
+    public static class ComputerInstanceHolder {
+        private static final Computer INSTANCE = new Computer();
+    }
+
+    /**
      * 정적 팩토리 메서드 제공
      * @return
      */
     public static Computer newInstance() {
-        if (INSTANCE == null) {
-            synchronized (Computer.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new Computer();
-                }
-            }
-        }
-        return INSTANCE;
+        return ComputerInstanceHolder.INSTANCE;
     }
 
     /**
