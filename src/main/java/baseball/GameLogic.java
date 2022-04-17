@@ -52,7 +52,6 @@ public final class GameLogic {
     public void startGame() {
         printGameMessage(INPUT_NUMBER_MESSSAGE);
         final String inputValue = getInputValue();
-        validInputValue(inputValue);
         printGameMessageWithLine(inputValue);
         processGame(inputValue, generatedValue);
         printResult();
@@ -65,7 +64,9 @@ public final class GameLogic {
 
     private String getInputValue() {
         try {
-            return Console.readLine();
+            final String inputValue = Console.readLine();
+            validInputValue(inputValue);
+            return inputValue;
         } catch (NoSuchElementException nse) {
             return null;
         }
@@ -112,7 +113,7 @@ public final class GameLogic {
      * @param inputNumber    사용자의 입력 값
      * @param computerNumber 컴퓨터가 생성한 값
      */
-    private void processGame(String inputNumber, List<String> computerNumber) {
+    private void processGame(final String inputNumber, final List<String> computerNumber) {
         this.playGame.initGameResult();
         final String[] seperatedInputNumer = inputNumber.split("");
         for (int i = 0; i < inputNumber.length(); i++) {
@@ -124,7 +125,6 @@ public final class GameLogic {
                 this.playGame.incrementStrikeCount();
                 continue;
             }
-            this.playGame.incrementBallCount();
         }
     }
 
@@ -132,7 +132,8 @@ public final class GameLogic {
      * 이번 게임의 결과를 출력
      */
     private void printResult() {
-        if (this.playGame.getNothingCount() > 0 && (this.playGame.getBallCount() + this.playGame.getStrikeCount() == 0)) {
+        if (this.playGame.getNothingCount() > 0
+                && (this.playGame.getBallCount() + this.playGame.getStrikeCount() == 0)) {
             printGameMessage("낫싱");
         }
 
@@ -155,11 +156,11 @@ public final class GameLogic {
         return playGame.isSuccess();
     }
 
-    private void printGameMessageWithLine(final String message){
+    private void printGameMessageWithLine(final String message) {
         System.out.println(message);
     }
 
-    private void printGameMessage(final String message){
+    private void printGameMessage(final String message) {
         System.out.print(message);
     }
 }
