@@ -1,7 +1,8 @@
 package baseball.service.computer;
 
 import camp.nextstep.edu.missionutils.Randoms;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -11,12 +12,15 @@ public final class Computer {
     /**
      * 숫자 생성 최소 범위
      */
-    private static final int START_NUM = 100;
+    private static final int START_NUM = 1;
     /**
      * 숫자 생성 최대 범위
      */
-    private static final int LAST_NUM = 999;
-
+    private static final int LAST_NUM = 9;
+    /**
+     *
+     */
+    private static final int NUMBER_LENGTH = 3;
     /**
      * 기본 생성자를 외부에서 생성하지 못하도록 막음
      */
@@ -43,22 +47,10 @@ public final class Computer {
      * 랜덤하며 중복되지 않는 난수의 3자리 목록생성
      */
     public List<String> generateNumber() {
-        int generatedNumber = Randoms.pickNumberInRange(START_NUM, LAST_NUM);
-        List<String> numberList = new ArrayList<>();
-        final String[] numberToString = String.valueOf(generatedNumber).split("");
-        for (final String numberStr : numberToString) {
-            checkDuplicateAdd(numberList, numberStr);
+        final LinkedHashSet<String> generatedNum = new LinkedHashSet<>();
+        while( generatedNum.size() < NUMBER_LENGTH){
+            generatedNum.add(String.valueOf(Randoms.pickNumberInRange(START_NUM, LAST_NUM)));
         }
-        if (numberList.size() < 3) {
-            return generateNumber();
-        }
-        return numberList;
+        return new LinkedList<>(generatedNum);
     }
-
-    private void checkDuplicateAdd(final List<String> source, final String target) {
-        if (!source.contains(target)) {
-            source.add(target);
-        }
-    }
-
 }
