@@ -1,6 +1,8 @@
 package baseball;
 
+import camp.nextstep.edu.missionutils.Console;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * 게임을 담당하는 클래스 생성
@@ -16,10 +18,6 @@ public final class Game {
      * 게임내에서 사용될 컴퓨터객체생성
      */
     private final Computer computer = Computer.newInstance();
-    /**
-     * 게임을 플레이할 사용자 선언
-     */
-    private final User player;
     /**
      * 이 게임의 낫싱카운트 저장변수
      */
@@ -41,8 +39,7 @@ public final class Game {
      * 사용자를 입력받아 게임을 초기화하는 생성자
      * @param player
      */
-    private Game(User player) {
-        this.player = player;
+    private Game() {
         // 새로운 게임이 시작되면 컴퓨터생성 변수를 초기화
         reGenerateValue();
     }
@@ -52,8 +49,8 @@ public final class Game {
      * @param user 게임 플레이어
      * @return 이번회차 게임객체 리턴
      */
-    public static Game getInstance(final User user) {
-        return new Game(user);
+    public static Game getInstance() {
+        return new Game();
     }
 
     /**
@@ -61,7 +58,7 @@ public final class Game {
      */
     public void startGame() {
         System.out.print(INPUT_NUMBER_MESSSAGE);
-        final String inputValue = player.getInputValue();
+        final String inputValue = getInputValue();
         validInputValue(inputValue);
         System.out.println(inputValue);
         processGame(inputValue, generatedValue);
@@ -71,6 +68,14 @@ public final class Game {
             return;
         }
         endGame();
+    }
+
+    private String getInputValue() {
+        try {
+            return Console.readLine();
+        } catch (NoSuchElementException nse) {
+            return null;
+        }
     }
 
     /**
@@ -85,7 +90,7 @@ public final class Game {
      */
     public void endGame() {
         System.out.println(END_GAME_CLOSING_MESSAGE);
-        final String inputValue = player.getInputValue();
+        final String inputValue = getInputValue();
         if ( "1".equals(inputValue)){
             reGenerateValue();
             startGame();
@@ -153,10 +158,6 @@ public final class Game {
      * @return
      */
     private boolean getResult(){
-        if (this.strikeCount == 3) {
-            return true;
-        }
-
-        return false;
+        return this.strikeCount == 3;
     }
 }
